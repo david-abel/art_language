@@ -3,11 +3,11 @@
 from midiutil.MidiFile import MIDIFile
 import sys
 import re
+import random
 
-def add_note(song, pitch, time, duration, volume):
-	# Now add the note.
+def add_note(song, pitch, time, duration = 0.5, volume = 80):
+	# add the note.
 	song.addNote(0,0,pitch,time,duration,volume)
-
 
 def main():
 	# Create the MIDIFile Object
@@ -15,14 +15,25 @@ def main():
 
 	if len(sys.argv) <= 1:
 		print "Usage: python text_to_music.py <text_file>"
-	# Gets just the file name
-	fileName = sys.argv[1]
-
+		quit()
 
 	trackName = re.split("\.",sys.argv[1])[0]
 
-	add_note
+	story = open("stories/" + trackName + ".txt", "r").read()
 
+	storyChars = list(story.lower())
+
+	time = 0
+	duration = 0.5
+	# Build a note
+	for char in storyChars:
+		pitch = 0
+		if char in ["a","b","c","d","e","f","g"]:
+			pitch = ord(char) - random.randint(35,45)
+		else:
+			volume = 0
+		add_note(song, pitch, time, duration)
+		time += duration
 
 	# Add track name and tempo. The first argument to addTrackName and
 	# addTempo is the time to write the event.
